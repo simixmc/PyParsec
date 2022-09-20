@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- saved from url=(0098)https://yastatic.net/s3/front-maps-static/maps-front-maps//static/v30/iframe-google-analytics.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <script>
+        (function() {
+            var PREFIX = 'maps-ga';
+            window.parent.postMessage({type: PREFIX + '/ready'}, '*')
+
+            var _id = null;
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            function init(id) {
+                _id = id;
+
+                var script = document.createElement('script');
+                script.async = true;
+                script.src = '//www.googletagmanager.com/gtag/js?id=' + _id;
+                var sibling = document.getElementsByTagName('script')[0];
+                sibling.parentNode.insertBefore(script, sibling);
+
+                script.onload = function () {
+                    gtag('js', new Date());
+                    gtag('config', _id);
+                };
+            }
+
+            function reachGoal(goalId) {
+                if (!_id) {
+                    return;
+                }
+
+                gtag('event', 'conversion', {
+                    send_to: _id + '/' + goalId
+                });
+            }
+
+            window.addEventListener('message', function (e) {
+                var types = (e.data.type || '').split('/');
+                var payload = e.data.payload;
+                var prefix = types[0];
+                var name = types[1];
+
+                if (prefix !== PREFIX) {
+                    return;
+                }
+
+                switch (name) {
+                    case 'init': {
+                        init(payload.id);
+                        break;
+                    }
+                    case 'reachGoal': {
+                        reachGoal(payload.goalId);
+                        break;
+                    }
+                }
+            });
+        })();
+    </script>
+</head>
+<body>
+
+
+</body></html>
